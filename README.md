@@ -8,7 +8,7 @@ This is an example for client application of gobel.
 
 # gobel
 - [gobel-api](https://github.com/bmf-san/gobel-api)
-- [gobel-admin-client](https://github.com/bmf-san/gobel-admin-client)
+- [gobel-admin-client-example](https://github.com/bmf-san/gobel-admin-client-example)
 - [gobel-client-example](https://github.com/bmf-san/gobel-client-example)
 - [gobel-example](https://github.com/bmf-san/gobel-example)
 - [gobel-ops-example](https://github.com/bmf-san/gobel-ops-example)

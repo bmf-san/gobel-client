@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// ExecuteHomeIndex responses a index view.
+// ExecuteHomeIndex responses a index template.
 func (p *Presenter) ExecuteHomeIndex(w http.ResponseWriter) error {
-	tpl := template.Must(template.ParseFiles("view/layout/base.tpl", "view/home/index.tpl"))
+	tpl := template.Must(template.ParseFS(tpls, "template/layout/base.tpl", "template/home/index.tpl"))
 	if err := tpl.ExecuteTemplate(w, "base", ""); err != nil {
 		return err
 	}

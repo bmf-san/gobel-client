@@ -119,8 +119,9 @@ func (pc *PostController) IndexByCategory(w http.ResponseWriter, r *http.Request
 	}
 
 	if err = pc.Presenter.ExecutePostIndexByCategory(w, &presenter.PostIndexByCategory{
-		Posts:      &posts,
-		Pagination: &pagination,
+		CategoryName: name,
+		Posts:        &posts,
+		Pagination:   &pagination,
 	}); err != nil {
 		pc.Logger.Error(err.Error())
 		pc.Presenter.Error(w, http.StatusInternalServerError)
@@ -170,6 +171,7 @@ func (pc *PostController) IndexByTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err = pc.Presenter.ExecutePostIndexByTag(w, &presenter.PostIndexByTag{
+		TagName:    name,
 		Posts:      &posts,
 		Pagination: &pagination,
 	}); err != nil {
