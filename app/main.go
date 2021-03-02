@@ -13,7 +13,7 @@ import (
 	"github.com/bmf-san/gobel-client-example/app/controller"
 	"github.com/bmf-san/gobel-client-example/app/logger"
 	"github.com/bmf-san/gobel-client-example/app/presenter"
-	"github.com/bmf-san/gobel-client-example/app/router"
+	"github.com/bmf-san/goblin"
 )
 
 const timeout time.Duration = 10 * time.Second
@@ -36,19 +36,48 @@ func main() {
 	sc := controller.NewSitemapController(logger, client, presenter)
 	fc := controller.NewFeedController(logger, client, presenter)
 
-	r := router.NewRouter()
-	r.SetHome(hc)
-	r.SetPosts(pc)
-	r.SetCategories(cc)
-	r.SetTags(tc)
+	r := goblin.NewRouter()
+	r.GET("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hc.Index(w, r)
+	}))
+
+	r.GET("/posts", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		pc.Index(w, r)
+	}))
+	r.GET("/posts/:title", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		pc.Show(w, r)
+	}))
+	r.GET("/posts/categories/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		pc.IndexByCategory(w, r)
+	}))
+	r.GET("/posts/tags/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		pc.IndexByTag(w, r)
+	}))
+
 	// TODO: implement later.
-	// r.SetComments(cmc)
-	r.SetSitemap(sc)
-	r.SetFeed(fc)
+	// r.POST("/posts/:title/comments", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// 	cc.Store(w, r)
+	// }))
+
+	r.GET("/categories", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cc.Index(w, r)
+	}))
+
+	r.GET("/tags", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tc.Index(w, r)
+	}))
+
+	r.GET("/sitemap", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sc.Index(w, r)
+	}))
+
+	r.GET("/feed", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fc.Index(w, r)
+	}))
 
 	s := http.Server{
 		Addr:    ":" + os.Getenv("SERVER_PORT"),
-		Handler: r.Mux,
+		Handler: r,
 	}
 
 	go func() {
